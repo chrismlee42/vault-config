@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: vault
+    managedBy: argocd
+    managementCodeGroup: chrismlee42
+    managementCodeProject: vault-config
+  name: vault
+spec:
+  finalizers:
+    - kubernetes
