@@ -6,7 +6,7 @@ metadata:
 commonLabels:
   app: vault
   managedBy: argocd
-  managementCodeGroup: chrismlee42-dev
+  managementCodeGroup: chrismlee42
   managementCodeProject: vault-config
 
 namespace: vault
