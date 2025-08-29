@@ -1,0 +1,29 @@
+name: Sync vault Application
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/sync-argocd-application.yaml'
+      - 'argocd/**'
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: chris-pc-vault
+    steps:
+      - name: Install ArgoCD CLI
+        run: |
+          curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+          rm argocd-linux-amd64
+
+      - name: Login to ArgoCD
+        env:
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+          ARGOCD_USERNAME: ${{ secrets.ARGOCD_USERNAME }}
+          ARGOCD_PASSWORD: ${{ secrets.ARGOCD_PASSWORD }}
+        run: |
+          argocd login ${{ secrets.ARGOCD_SERVER }} --username ${{ secrets.ARGOCD_USERNAME }} --password ${{ secrets.ARGOCD_PASSWORD }} --insecure --plaintext
+
+      - name: Sync ArgoCD Applications
+        run: argocd app sync argocd/vault
